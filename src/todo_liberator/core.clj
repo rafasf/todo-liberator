@@ -7,7 +7,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [environ.core :refer [env]]
             [compojure.handler :refer [site]]
-            [compojure.core :refer [routes defroutes ANY]]))
+            [compojure.core :refer [routes defroutes ANY OPTIONS]]))
 
 (defn body-in [context]
  (json/read-str (slurp (get-in context [:request :body]))))
@@ -27,6 +27,8 @@
   :handle-ok (fn [_] (todos/show id)))
 
 (defroutes todo-routes
+  (OPTIONS "/todos" [] {:status 200})
+  (OPTIONS "/todos/:id" [] {:status 200})
   (ANY "/todos" [] all-todos)
   (ANY "/todos/:id" [id] (todos id)))
 

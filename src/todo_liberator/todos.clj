@@ -6,9 +6,11 @@
     @todo-store)
 
 (defn create [todo]
-  (let [uuid (str (java.util.UUID/randomUUID))
-        todo (assoc todo :id uuid)]
-    (swap! todo-store assoc (keyword uuid) todo)))
+  (let [uuid (str (java.util.UUID/randomUUID))]
+    (assoc todo :id uuid :completed false)))
+
+(defn store [todo]
+  (swap! todo-store assoc (:id todo) todo))
 
 (defn show [id]
   ((keyword id) @todo-store))

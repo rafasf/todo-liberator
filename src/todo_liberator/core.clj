@@ -12,19 +12,31 @@
 (defn body-in [context]
  (json/read-str (slurp (get-in context [:request :body]))))
 
+(defn todo->representation [todo]
+  (assoc todo :url (str "/todos/" (:id todo))))
+
 (defresource all-todos
   :available-media-types ["application/json"]
   :allowed-methods [:get :post :delete]
-  :post! (fn [context] (todos/create (body-in context)))
+  :post! (fn [context] (let [newest (todos/create (body-in context))
+                             all-todos (todos/store newest)]
+                         {::newest newest}))
   :delete! (fn [_] (todos/delete-all))
-  :handle-ok (fn [_] (todos/list)))
+  :handle-ok (fn [_] (->
+                       (vals (todos/list))
+                       (#(map todo->representation %))))
+  :handle-created (fn [context] (->
+                                  (::newest context)
+                                  todo->representation)))
 
 (defresource todos [id]
   :available-media-types ["application/json"]
   :allowed-methods [:get :patch :delete]
   :patch! (fn [context] (todos/change id (body-in context)))
   :delete! (fn [_] (todos/delete id))
-  :handle-ok (fn [_] (todos/show id)))
+  :handle-ok (fn [_] (->
+                       (todos/show id)
+                       todo->representation)))
 
 (defroutes todo-routes
   (OPTIONS "/todos" [] {:status 200})

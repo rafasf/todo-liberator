@@ -33,8 +33,8 @@
   (ANY "/todos/:id" [id] (todos id)))
 
 (defn todo-cors [app]
-  (wrap-cors app :access-control-allow-origin [#"http://todobackend\.com"]
-                 :access-control-allow-methods [:get :put :post :delete]))
+  (wrap-cors app :access-control-allow-origin [#".*"]
+                 :access-control-allow-methods [:get :put :post :delete :options]))
 (def app
   (-> (routes todo-routes)
       (wrap-params)

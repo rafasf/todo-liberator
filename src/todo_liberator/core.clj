@@ -9,11 +9,12 @@
             [compojure.handler :refer [site]]
             [compojure.core :refer [routes defroutes ANY OPTIONS]]))
 
+(def base-url "http://shrouded-stream-3826.herokuapp.com")
 (defn body-in [context]
  (json/read-str (slurp (get-in context [:request :body]))))
 
 (defn todo->representation [todo]
-  (assoc todo :url (str "/todos/" (:id todo))))
+  (assoc todo :url (str base-url "/todos/" (:id todo))))
 
 (defresource all-todos
   :available-media-types ["application/json"]

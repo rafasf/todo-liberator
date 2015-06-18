@@ -8,6 +8,7 @@
                  [org.clojure/data.json "0.2.5"]
                  [ring/ring-core "1.2.1"]
                  [ring/ring-jetty-adapter "1.2.2"]
+                 [ring-cors "0.1.7"]
                  [environ "0.5.0"]]
   :plugins [[lein-ring "0.8.11"]]
   :min-lein-version "2.5.1"

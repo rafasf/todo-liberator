@@ -9,7 +9,7 @@
             [compojure.handler :refer [site]]
             [compojure.core :refer [routes defroutes ANY OPTIONS]]))
 
-(def base-url "http://shrouded-stream-3826.herokuapp.com")
+(def base-url "https://shrouded-stream-3826.herokuapp.com")
 
 (defn body-in [context]
  (json/read-str (slurp (get-in context [:request :body]))))

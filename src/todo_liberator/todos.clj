@@ -5,25 +5,26 @@
 (defn list []
     @todo-store)
 
-(defn create [todo]
-  (let [uuid (str (java.util.UUID/randomUUID))]
-    (assoc todo :id uuid :completed false)))
-
 (defn store [todo]
-  (swap! todo-store assoc (:id todo) todo))
+  (swap! todo-store assoc (todo "id") todo))
+
+(defn create [todo]
+  (let [uuid (str (java.util.UUID/randomUUID))
+        new-todo (assoc todo "id" uuid "completed" false)]
+    (store new-todo)
+    new-todo))
 
 (defn show [id]
-  ((keyword id) @todo-store))
+  (@todo-store id))
 
 (defn change [id partial-todo]
-  (swap! todo-store (fn [store]
-                      (update-in store [(keyword id)] #(merge % partial-todo)))))
+  (let [updated (update-in @todo-store [id] #(merge % partial-todo))]
+    (reset! todo-store updated)
+    (@todo-store id)))
 
 (defn delete [id]
-  (swap! todo-store (fn [store]
-                      (dissoc store (keyword id)))))
+  (swap! todo-store dissoc id))
 
 (defn delete-all []
   (reset! todo-store {}))
-
 

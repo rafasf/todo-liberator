@@ -47,7 +47,7 @@
 
 (defn todo-cors [app]
   (wrap-cors app :access-control-allow-origin [#".*"]
-                 :access-control-allow-methods [:get :put :post :delete :options]))
+                 :access-control-allow-methods [:get :put :post :delete :patch :options]))
 (def app
   (-> (routes todo-routes)
       (wrap-params)
